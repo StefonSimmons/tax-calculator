@@ -158,9 +158,9 @@ class PersonalIncomeTax {
 }
 
 // // EXAMPLE: Adjustable Taxable Income
-// const fedIncome = 128006;
-// const stateIncome = 125936;
-// const cityIncome = 125936;
+// const fedIncome = 22806;
+// const stateIncome = 25936;
+// const cityIncome = 25936;
 
 // const fed = new PersonalIncomeTax(fedIncome,'federal')
 // const state = new PersonalIncomeTax(stateIncome,'state')
