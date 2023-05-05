@@ -6,6 +6,9 @@ I originally wrote this calculator in JavaScript, but decided to convert it to T
 ## Takeaways
 TypeScript is a strictly-typed language that allows for a safer and easily maintainable developer experience. It's safer because it allows for better type-related error detection and prevention at compile time, reducing the likelihood of runtime errors. This also helps reduce the number of tests needed as seperate processes for quality assurance. Finally, since TypeScript makes the types of variables and methods explicit, it helps with writing code documentation. This can lower the barrier of entry for other developers to read and understand your code so they may contribute or utilize your tools for their own needs.
 
+## Docs
+https://stefonsimmons.github.io/tax-calculator/modules.html
+
 
 ## Libraries
-typedoc: a documentation generator for TypeScript 
+**typedoc:** a documentation generator for TypeScript 
