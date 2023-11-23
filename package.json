@@ -2,10 +2,10 @@
   "name": "tax-app",
   "version": "1.0.0",
   "description": "",
-  "main": "taxes.js",
+  "main": "taxes.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node dist/taxes.js",
+    "start": "ts-node taxes.ts",
     "docs": "npx typedoc taxes.ts",
     "docs:open": "open docs/index.html"
   },

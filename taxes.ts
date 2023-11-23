@@ -1,3 +1,25 @@
+import {years} from "./taxBracketsByYear";
+
+/**
+ * Extends the global String interface to include a custom method 'capitalize'.
+ * This method capitalizes the first letter of the string and converts the rest of the characters to lowercase.
+ * @returns {string} The capitalized string.
+ */
+declare global {
+    // since I'm using import or export in the program, I need to declare the String extension in the global scope
+    interface String{
+        capitalize(): string;
+    }
+}
+
+/**
+ * Implementation of the 'capitalize' method for strings.
+ * Capitalizes the first letter and converts the rest of the characters to lowercase.
+ * @returns {string} The capitalized string.
+ */
+String.prototype.capitalize = function () {
+    return `${this[0].toUpperCase()}${this.toLowerCase().slice(1)}`
+}
 
 /**
  * Defines a type which represents a tax bracket for a progressive tax system.
@@ -10,77 +32,32 @@ type TaxBracket = {
 }
 
 /**
- * Represents a governmental body, which can be either "federal", "state", or "city".
- * Inherits String object to provide access to String properties and methods   
- */
-class GovBody extends String{
-    // instance property assignments
-    str: ('federal' | 'state' | 'city')
-
-    constructor(govBody: ('federal' | 'state' | 'city')){
-        super(govBody) 
-        this.str = govBody
-    }
-
-    /**
-     * Capitalizes the first letter in a string. 
-     * @returns {string} a new string with the first letter capitalized and all other letters lowercased
-     */
-    capitalize(): string {
-        return `${this.str[0].toUpperCase()}${this.str.toLowerCase().slice(1)}`
-    }
-}
-
-/**
  * Represents a Personal Income Tax calculator for the Federal, New York State, or New York City level based on user income and governmental body.
  * The class contains methods to calculate marginal tax liability and rate on a progressive tax system. It also provides a method that summarizes tax liability based on the initialized tax brackets.
- * @property {number} income - The user's input adjustable taxable income after deductions
- * @property {GovBody} govBody - An instance of the GovBody class representing the government body (federal, state, or city) for which the taxes are being calculated
- * @property {TaxBracket[]} fedTaxBrackets - An array of federal tax brackets used to calculate federal taxes
- * @property {TaxBracket[]} nyTaxBrackets - An array of New York State tax brackets used to calculate state taxes
- * @property {TaxBracket[]} nycTaxBrackets - An array of New York City tax brackets used to calculate city taxes
+ * @property {number} income - User input. adjustable taxable income after deductions
+ * @property {string} govBody - User input. The government body (federal, state, or city) for which the taxes are being calculated
+ * @property {number} year - User input. The year of the desired tax brackets 
+ * @property {TaxBracket[]} fed - An array of federal tax brackets used to calculate federal taxes
+ * @property {TaxBracket[]} state - An array of New York State tax brackets used to calculate state taxes
+ * @property {TaxBracket[]} city - An array of New York City tax brackets used to calculate city taxes
  */
 class PersonalIncomeTax {
     // instance property assignments
     income: number
-    govBody: GovBody
-    fedTaxBrackets: TaxBracket[]
-    nyTaxBrackets: TaxBracket[]
-    nycTaxBrackets: TaxBracket[]
+    govBody: string
+    year: number
+    fed: TaxBracket[]
+    state: TaxBracket[]
+    city: TaxBracket[]
 
-    constructor(income: number, govBody: ('federal' | 'state' | 'city')){
+    constructor(income: number, govBody: ('federal' | 'state' | 'city'), year: keyof typeof years){
         this.income = income
-        this.govBody = new GovBody(govBody)
+        this.govBody = govBody
+        this.year = year
 
-        // 2022 tax brackets
-        this.fedTaxBrackets = [
-            { minIncome: 0, maxIncome: 10275, rate: 0.1 }, 
-            { minIncome: 10275, maxIncome: 41775, rate: 0.12 },
-            { minIncome: 41775, maxIncome: 89075, rate: 0.22 },
-            { minIncome: 89075, maxIncome: 170050, rate: 0.24 },
-            { minIncome: 170050, maxIncome: 215950, rate: 0.32 },
-            { minIncome: 215950, maxIncome: 539900, rate: 0.35 },
-            { minIncome: 539900, maxIncome: Infinity, rate: 0.37}
-        ];
-
-        this.nyTaxBrackets = [
-            { minIncome: 0, maxIncome: 8500, rate: 0.04 }, 
-            { minIncome: 8500, maxIncome: 11700, rate: 0.045 },
-            { minIncome: 11700, maxIncome: 13900, rate: 0.0525 },
-            { minIncome: 13900, maxIncome: 80650, rate: 0.0585 },
-            { minIncome: 80650, maxIncome: 215400, rate: 0.0625 },
-            { minIncome: 215400, maxIncome: 1077551, rate: 0.0685 },
-            { minIncome: 1077550, maxIncome: 5000000, rate: 0.0965 },
-            { minIncome: 5000000, maxIncome: 25000000, rate: 0.103 }, 
-            { minIncome: 25000000, maxIncome: Infinity, rate: 0.109 }
-        ];
-
-        this.nycTaxBrackets = [
-            { minIncome: 0, maxIncome: 12000, rate: 0.03078 }, 
-            { minIncome: 12000, maxIncome: 25000.01, rate: 0.03762 },
-            { minIncome: 25000, maxIncome: 50000, rate: 0.03819 },
-            { minIncome: 50000, maxIncome: Infinity, rate: 0.03876 }
-        ];
+        this.fed = years[year].fed
+        this.state = years[year].state
+        this.city = years[year].city
     }
 
     /**
@@ -117,13 +94,13 @@ class PersonalIncomeTax {
      */
     getTaxBrackets(): TaxBracket[] {
         // Uses the tax bracket
-        switch (this.govBody.toLowerCase()) {
+        switch (this.govBody) {
             case "federal":
-                return this.fedTaxBrackets  
+                return this.fed  
             case "state":
-                return this.nyTaxBrackets 
+                return this.state 
             case "city":
-                return this.nycTaxBrackets    
+                return this.city    
             default:
                 return []
         }
@@ -135,9 +112,9 @@ class PersonalIncomeTax {
     */
     getMarginalTaxRate(): number{
         const taxBrackets = this.getTaxBrackets()
-        const oneTaxBracket = taxBrackets.find(({minIncome, maxIncome}) => {
+        const oneTaxBracket = taxBrackets.filter(({minIncome, maxIncome}) => {
             return this.income > minIncome && this.income < maxIncome
-        })
+        })[0]
         if(oneTaxBracket?.rate){
             return Number((oneTaxBracket.rate * 100).toFixed(2))
         }
@@ -152,20 +129,28 @@ class PersonalIncomeTax {
         const marginalTaxRate = this.getMarginalTaxRate()
         const marginalTaxLiability = this.calculateMarginalTaxLiability()
 
-        return `${this.govBody.capitalize()} Taxable Income of $${this.income} per year: marginal tax rate is ${marginalTaxRate}% and the tax liability is $${marginalTaxLiability}.`
+        return `${this.govBody.capitalize()} Taxable Income of $${this.income} for ${this.year}: marginal tax rate is ${marginalTaxRate}% and the tax liability is $${marginalTaxLiability}.`
     }
 
 }
 
-// // EXAMPLE: Adjustable Taxable Income
-// const fedIncome = 22806;
-// const stateIncome = 25936;
-// const cityIncome = 25936;
+/**
+ * EXAMPLE: Adjustable Taxable Income
+ * Uncomment the below lines and insert your desired amount 
+ */
 
-// const fed = new PersonalIncomeTax(fedIncome,'federal')
-// const state = new PersonalIncomeTax(stateIncome,'state')
-// const city = new PersonalIncomeTax(cityIncome,'city')
+const fedIncome = 7986.24; // insert your adjustable taxable income for federal
+const stateIncome = 7936.24; // insert your adjustable taxable income for state
+const cityIncome = 7936.24; // insert your adjustable taxable income for city
+const taxYear = 2023; // insert the tax year you earned the above income
 
-// console.log(fed.summarizeTaxLiability())
-// console.log(state.summarizeTaxLiability())
-// console.log(city.summarizeTaxLiability())
+const myFed = new PersonalIncomeTax(fedIncome,'federal', taxYear )
+const myState = new PersonalIncomeTax(stateIncome,'state', taxYear)
+const myCity = new PersonalIncomeTax(cityIncome,'city', taxYear)
+
+console.log(myFed.summarizeTaxLiability())
+console.log(myState.summarizeTaxLiability())
+console.log(myCity.summarizeTaxLiability())
+
+
+export {}
