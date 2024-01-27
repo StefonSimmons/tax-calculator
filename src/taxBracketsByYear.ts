@@ -1,5 +1,5 @@
 // New York, NY Brackets
-export const years = {
+const years = {
     2022: {
         fed: [
             { minIncome: 0, maxIncome: 10275, rate: 0.1 }, 
