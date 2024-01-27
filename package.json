@@ -2,17 +2,17 @@
   "name": "tax-app",
   "version": "1.0.0",
   "description": "",
-  "main": "taxes.ts",
+  "main": "src/taxes.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node taxes.ts",
-    "docs": "npx typedoc taxes.ts",
+    "docs": "npx typedoc",
     "docs:open": "open docs/index.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typedoc": "^0.24.6"
+    "typedoc": "^0.25.7"
   }
 }
