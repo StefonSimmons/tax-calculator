@@ -1,0 +1,3 @@
+{
+    "entryPoints": ["src/taxes.ts", "src/taxBracketsByYear.ts", "src/taxBracketType.ts", "src/extendedPrototypes.ts"]
+}

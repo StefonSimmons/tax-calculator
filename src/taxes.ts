@@ -1,35 +1,8 @@
-import {years} from "./taxBracketsByYear";
-
 /**
- * Extends the global String interface to include a custom method 'capitalize'.
- * This method capitalizes the first letter of the string and converts the rest of the characters to lowercase.
- * @returns {string} The capitalized string.
- */
-declare global {
-    // since I'm using import or export in the program, I need to declare the String extension in the global scope
-    interface String{
-        capitalize(): string;
-    }
-}
+ * Personal Tax Bracket - main
+ * @module
+*/
 
-/**
- * Implementation of the 'capitalize' method for strings.
- * Capitalizes the first letter and converts the rest of the characters to lowercase.
- * @returns {string} The capitalized string.
- */
-String.prototype.capitalize = function () {
-    return `${this[0].toUpperCase()}${this.toLowerCase().slice(1)}`
-}
-
-/**
- * Defines a type which represents a tax bracket for a progressive tax system.
- * minIncome: a number representing the minimum income threshold for this tax bracket
- * maxIncome: a number representing the maximum income threshold for this tax bracket
- * rate: a number representing the tax rate for this tax bracket, expressed as a decimal between 0 and 1.
- */
-type TaxBracket = {
-    minIncome: number, maxIncome: number, rate: number
-}
 
 /**
  * Represents a Personal Income Tax calculator for the Federal, New York State, or New York City level based on user income and governmental body.
@@ -50,6 +23,12 @@ class PersonalIncomeTax {
     state: TaxBracket[]
     city: TaxBracket[]
 
+    /**
+     *  Define instance properties
+     * @param income 
+     * @param govBody 
+     * @param year 
+     */
     constructor(income: number, govBody: ('federal' | 'state' | 'city'), year: keyof typeof years){
         this.income = income
         this.govBody = govBody
@@ -138,19 +117,15 @@ class PersonalIncomeTax {
  * EXAMPLE: Adjustable Taxable Income
  * Uncomment the below lines and insert your desired amount 
  */
+// const fedIncome = 7986.24; // insert your adjustable taxable income for federal
+// const stateIncome = 7936.24; // insert your adjustable taxable income for state
+// const cityIncome = 7936.24; // insert your adjustable taxable income for city
+// const taxYear = 2023; // insert the tax year you earned the above income
 
-const fedIncome = 7986.24; // insert your adjustable taxable income for federal
-const stateIncome = 7936.24; // insert your adjustable taxable income for state
-const cityIncome = 7936.24; // insert your adjustable taxable income for city
-const taxYear = 2023; // insert the tax year you earned the above income
+// const myFed = new PersonalIncomeTax(fedIncome,'federal', taxYear )
+// const myState = new PersonalIncomeTax(stateIncome,'state', taxYear)
+// const myCity = new PersonalIncomeTax(cityIncome,'city', taxYear)
 
-const myFed = new PersonalIncomeTax(fedIncome,'federal', taxYear )
-const myState = new PersonalIncomeTax(stateIncome,'state', taxYear)
-const myCity = new PersonalIncomeTax(cityIncome,'city', taxYear)
-
-console.log(myFed.summarizeTaxLiability())
-console.log(myState.summarizeTaxLiability())
-console.log(myCity.summarizeTaxLiability())
-
-
-export {}
+// console.log(myFed.summarizeTaxLiability())
+// console.log(myState.summarizeTaxLiability())
+// console.log(myCity.summarizeTaxLiability())
