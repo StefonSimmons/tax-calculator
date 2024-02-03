@@ -10,8 +10,8 @@ First Time Run
 - `npm install`
 
 Run the Program
-- open `taxBracketsByYear.ts`
-  - update the years oject to include your desired tax brackets by year for folks who are **single or married filing separately**
+- open `src/taxBracketsByYear.ts`
+  - update the `years` object to include your desired tax brackets by year for folks who are **single or married filing separately**
   - by default, the **New York, NY** brackets for **2022** and **2023** are included.
 - open `taxes.ts`
 - uncomment the following lines in `taxes.ts`
