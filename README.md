@@ -1,5 +1,5 @@
 # Personal Income Tax Calculator
-Calculate personal income tax liability and rate based on the governing body (federal, state, or city) and the associated tax brackets. Currently, this stript only performs calculations for folks who are **single or married filing separately**.
+Calculate personal income tax liability and rate based on the governing body (federal, state, or city) and the associated tax brackets. Currently, this script only performs calculations for folks who are **single or married filing separately**.
 I originally wrote this calculator in JavaScript, but decided to convert it to TypeScript.
 
 # Usage
